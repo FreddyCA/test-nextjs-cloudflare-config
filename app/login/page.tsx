@@ -7,9 +7,9 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <main >
+    <main>
       <div>
-        <span>LOGO</span>
+        <span>Login</span>
       </div>
     </main>
   );
