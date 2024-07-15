@@ -8,6 +8,20 @@
       "when": 1721020516681,
       "tag": "0000_dark_maginty",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1721021251992,
+      "tag": "0001_wonderful_strong_guy",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1721022356152,
+      "tag": "0002_magical_argent",
+      "breakpoints": true
     }
   ]
 }
