@@ -38,3 +38,6 @@ next-env.d.ts
 
 # seed
 seed*
+
+#api
+/app/api
