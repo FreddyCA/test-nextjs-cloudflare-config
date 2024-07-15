@@ -23,8 +23,6 @@ export default function Home() {
         </div>
         <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
           <Image
-            // src="/hero-desktop.png"
-            // src="/hero-desktop.webp"
             src={"/hero-desktop.avif"}
             alt="Screenshots of the dashboard"
             width={1000}
@@ -33,7 +31,7 @@ export default function Home() {
             priority
           />
           <Image
-            src="/hero-mobile.png"
+            src="/hero-mobile.avif"
             alt="Screenshots of the dashboard"
             width={560}
             height={620}
