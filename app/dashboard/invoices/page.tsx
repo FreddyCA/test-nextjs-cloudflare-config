@@ -2,6 +2,7 @@ import { lusitana } from "@/app/ui/fonts";
 import { CreateInvoice } from "@/app/ui/invoices/buttons";
 import Search from "@/app/ui/search";
 import { Suspense } from "react";
+export const runtime = "edge";
 
 export default function InvoicesPage() {
   return (

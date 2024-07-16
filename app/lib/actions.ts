@@ -3,6 +3,7 @@
 // definitions.ts -> export type InvoiceForm = {}
 // placeholder-data.js -> DATOS INICIALES const etc = [{}], module.export = {etc}
 // utils.ts formatCurrency formatDateToLocal generateYAxis generatePagination
+"use server";
 
 import { eq } from "drizzle-orm";
 import { db } from "./db";
