@@ -12,7 +12,16 @@ export default function InvoicesPage() {
     try {
       const data = await getDataPokeapi();
 
-      const response = await fetch("/api/insert-users", {
+      // const response = await fetch("/api/insert-users", {
+      //   method: "POST",
+      // });
+      // const response = await fetch("/api/insert-invoices", {
+      //   method: "POST",
+      // });
+      // const response = await fetch("/api/insert-customers", {
+      //   method: "POST",
+      // });
+      const response = await fetch("/api/insert-revenue", {
         method: "POST",
       });
 
@@ -36,7 +45,7 @@ export default function InvoicesPage() {
       }}
     >
       <div>
-        <button onClick={fetchData}>Fetch pokeapi</button>
+        <button onClick={fetchData}>Enviar revenue</button>
       </div>
       {dataDB && <h2>se envio la data a la db</h2>}
       {dataResponse && (

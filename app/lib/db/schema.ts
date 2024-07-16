@@ -5,7 +5,7 @@ import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 // USERS
 export const usersTable = sqliteTable("users", {
-  id: text("id").primaryKey().default(`uuid_generate_v4()`),
+  id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").unique().notNull(),
   password: text("password").notNull(),
@@ -13,20 +13,19 @@ export const usersTable = sqliteTable("users", {
 
 // INVOICES
 export const invoicesTable = sqliteTable("invoices", {
-  // id: text("id").primaryKey().default(sql`uuid_generate_v4()`), // sirve para que se genere en el servidor
-  id: text("id").primaryKey().default(`uuid_generate_v4()`),
+  id: text("id").primaryKey(),
   customer_id: text("customer_id").notNull(),
   amount: integer("amount").notNull(),
   status: text("status").notNull(),
-  date: text("date").notNull(), // Utilizamos text para almacenar la fecha
+  date: text("date").notNull(),
 });
 
 // CUSTOMERS
 export const customersTable = sqliteTable("customers", {
-  id: text("id").primaryKey().default(`uuid_generate_v4()`),
+  id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").unique().notNull(),
-  password: text("password").notNull(),
+  image_url: text("image_url").notNull(),
 });
 
 // REVENUE

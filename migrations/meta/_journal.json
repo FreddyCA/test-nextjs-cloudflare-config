@@ -43,6 +43,55 @@
       "when": 1721087298105,
       "tag": "0005_reflective_frightful_four",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1721088656963,
+      "tag": "0006_worried_madame_masque",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1721088877467,
+      "tag": "0007_glamorous_romulus",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1721089131876,
+      "tag": "0008_clean_alice",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1721089187855,
+      "tag": "0009_romantic_talisman",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1721089718039,
+      "tag": "0010_zippy_tigra",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1721089777720,
+      "tag": "0011_oval_black_knight",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1721090229024,
+      "tag": "0012_condemned_purple_man",
+      "breakpoints": true
     }
   ]
 }

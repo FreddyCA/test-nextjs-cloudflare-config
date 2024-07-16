@@ -180,9 +180,11 @@ const revenue = [
   { month: "Dec", revenue: 4800 },
 ];
 
-export default initialDB = {
-  users,
-  customers,
-  invoices,
-  revenue,
+const initialDB = {
+  users: users,
+  customers: customers,
+  invoices: invoices,
+  revenue: revenue,
 };
+
+export default initialDB;
