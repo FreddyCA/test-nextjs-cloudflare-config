@@ -1,8 +1,9 @@
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { lusitana } from "@/app/ui/fonts";
-// import { Revenue } from '@/app/lib/definitions';
 import { fetchRevenue } from "@/app/lib/data";
 import { generateYAxis } from "@/app/lib/utils";
+
+export const runtime = 'edge';
 
 export default async function RevenueChart() {
   const revenue = await fetchRevenue();
