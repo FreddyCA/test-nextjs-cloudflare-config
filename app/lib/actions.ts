@@ -3,3 +3,22 @@
 // definitions.ts -> export type InvoiceForm = {}
 // placeholder-data.js -> DATOS INICIALES const etc = [{}], module.export = {etc}
 // utils.ts formatCurrency formatDateToLocal generateYAxis generatePagination
+
+import { eq } from "drizzle-orm";
+import { db } from "./db";
+import { invoicesTable } from "./db/schema";
+import { revalidatePath } from "next/cache";
+
+export async function deleteInvoice(id: string) {
+  try {
+    await db.delete(invoicesTable).where(eq(invoicesTable.id, id)).execute();
+
+    // Asumiendo que `revalidatePath` es una función para revalidar la caché o similar
+    revalidatePath("/dashboard/invoices");
+
+    return { message: "Deleted Invoice." };
+  } catch (error) {
+    console.error("Database Error:", error);
+    return { message: "Database Error: Failed to Delete Invoice." };
+  }
+}

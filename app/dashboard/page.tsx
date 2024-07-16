@@ -29,7 +29,6 @@ export default function DashboardPage() {
         </Suspense>
         <Suspense fallback={<LatestInvoicesSkeleton />}>
           <LatestInvoices />
-          <RevenueChart />
         </Suspense>
       </div>
     </main>
