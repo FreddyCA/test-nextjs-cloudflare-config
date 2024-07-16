@@ -3,8 +3,6 @@ import { lusitana } from "../fonts";
 import Image from "next/image";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
-export const runtime = 'edge';
-
 export default async function LatestInvoices() {
   const latestInvoices = await fetchLatestInvoices();
   return (
