@@ -3,7 +3,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { PokeapiResponse } from "./definitions";
 import { db } from "./db";
 import { customersTable, invoicesTable, revenueTable } from "./db/schema";
-import { desc, eq, ilike, sql } from "drizzle-orm";
+import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
 
 export async function getDataPokeapi(): Promise<PokeapiResponse> {
   const res = await fetch("https://pokeapi.co/api/v2/pokemon");
@@ -70,11 +70,11 @@ export async function fetchCardData() {
   }
 }
 
-
 const ITEMS_PER_PAGE = 6;
-export async function fetchFilteredInvoices(query: string, currentPage: number) {
-  noStore();
-
+export async function fetchFilteredInvoices(
+  query: string,
+  currentPage: number
+) {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
   try {
@@ -89,19 +89,27 @@ export async function fetchFilteredInvoices(query: string, currentPage: number) 
         image_url: customersTable.image_url,
       })
       .from(invoicesTable)
-      .innerJoin(customersTable, eq(invoicesTable.customer_id, customersTable.id))
-      .where(sql`${ilike(customersTable.name, `%${query}%`)}
-              OR ${ilike(customersTable.email, `%${query}%`)}
-              OR ${ilike(invoicesTable.amount, `%${query}%`)}
-              OR ${ilike(invoicesTable.date, `%${query}%`)}
-              OR ${ilike(invoicesTable.status, `%${query}%`)}`)
-      .orderBy(desc(invoicesTable.date))
+      .leftJoin(
+        customersTable,
+        eq(invoicesTable.customer_id, customersTable.id)
+      )
+      .where(
+        or(
+          sql`LOWER(${customersTable.name}) LIKE LOWER(${`%${query}%`})`,
+          sql`LOWER(${customersTable.email}) LIKE LOWER(${`%${query}%`})`,
+          !isNaN(Number(query)) ? eq(invoicesTable.amount, Number(query)) : sql`1=0`, // Verifica si el query es un número
+          sql`LOWER(${invoicesTable.status}) LIKE LOWER(${`%${query}%`})`,
+          sql`LOWER(${invoicesTable.date}) LIKE LOWER(${`%${query}%`})`
+        )
+      )
+      .orderBy(sql`${invoicesTable.date} DESC`)
       .limit(ITEMS_PER_PAGE)
       .offset(offset);
 
+    console.log('Fetched Data:', data);
     return data;
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch invoices.');
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch invoices.");
   }
 }
