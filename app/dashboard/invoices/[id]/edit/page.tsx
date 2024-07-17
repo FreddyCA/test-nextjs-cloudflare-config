@@ -1,5 +1,4 @@
+export const runtime = "edge";
 export default function EditPage() {
-  return (
-    <div>Edit Page</div>
-  )
+  return <div>Edit Page</div>;
 }
