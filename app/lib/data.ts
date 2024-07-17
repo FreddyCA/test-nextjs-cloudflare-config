@@ -3,8 +3,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { PokeapiResponse } from "./definitions";
 import { db } from "./db";
 import { customersTable, invoicesTable, revenueTable } from "./db/schema";
-import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
-import { count } from "console";
+import { asc, desc, eq, or, sql } from "drizzle-orm";
 
 export async function getDataPokeapi(): Promise<PokeapiResponse> {
   const res = await fetch("https://pokeapi.co/api/v2/pokemon");
@@ -71,35 +70,6 @@ export async function fetchCardData() {
   }
 }
 
-export async function fetchInvoicesPages(query: string) {
-  noStore();
-  try {
-    const data = await db
-      .select()
-      .from(invoicesTable)
-      .leftJoin(
-        customersTable,
-        eq(invoicesTable.customer_id, customersTable.id)
-      )
-      .where(
-        or(
-          sql`LOWER(${customersTable.name}) LIKE LOWER(${`%${query}%`})`,
-          sql`LOWER(${customersTable.email}) LIKE LOWER(${`%${query}%`})`,
-          !isNaN(Number(query))
-            ? eq(invoicesTable.amount, Number(query))
-            : sql`1=0`, // Verifica si el query es un número
-          sql`LOWER(${invoicesTable.status}) LIKE LOWER(${`%${query}%`})`,
-          sql`LOWER(${invoicesTable.date}) LIKE LOWER(${`%${query}%`})`
-        )
-      )
-      const totalPages = Math.ceil(Number(data.length) / ITEMS_PER_PAGE);
-      return totalPages;
-  } catch (error) {
-    console.error("Database Error:", error);
-    throw new Error("Failed to fetch invoices page.");
-  }
-}
-
 const ITEMS_PER_PAGE = 6;
 export async function fetchFilteredInvoices(
   query: string,
@@ -141,5 +111,47 @@ export async function fetchFilteredInvoices(
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch invoices.");
+  }
+}
+
+export async function fetchInvoicesPages(query: string) {
+  noStore();
+  try {
+    const data = await db
+      .select()
+      .from(invoicesTable)
+      .leftJoin(
+        customersTable,
+        eq(invoicesTable.customer_id, customersTable.id)
+      )
+      .where(
+        or(
+          sql`LOWER(${customersTable.name}) LIKE LOWER(${`%${query}%`})`,
+          sql`LOWER(${customersTable.email}) LIKE LOWER(${`%${query}%`})`,
+          !isNaN(Number(query))
+            ? eq(invoicesTable.amount, Number(query))
+            : sql`1=0`, // Verifica si el query es un número
+          sql`LOWER(${invoicesTable.status}) LIKE LOWER(${`%${query}%`})`,
+          sql`LOWER(${invoicesTable.date}) LIKE LOWER(${`%${query}%`})`
+        )
+      );
+    const totalPages = Math.ceil(Number(data.length) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch invoices page.");
+  }
+}
+
+export async function fetchCustomers() {
+  try {
+    const data = await db
+      .select({ id: customersTable.id, name: customersTable.name })
+      .from(customersTable)
+      .orderBy(asc(customersTable.name));
+    return data;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch all customers.");
   }
 }
