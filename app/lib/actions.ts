@@ -12,6 +12,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
+import { State } from "./definitions";
 
 export async function deleteInvoice(id: string) {
   try {
@@ -27,29 +28,16 @@ export async function deleteInvoice(id: string) {
   }
 }
 
+
 const FormSchema = z.object({
   id: z.string(),
-  customerId: z.string({
-    invalid_type_error: "Please select a customer.",
-  }),
-  amount: z.coerce
-    .number()
-    .gt(0, { message: "Please enter an amount greater than $0." }),
-  status: z.enum(["pending", "paid"], {
-    invalid_type_error: "Please select an invoice status",
-  }),
+  customerId: z.string().nonempty("Please select a customer."),
+  amount: z.coerce.number().gt(0, { message: "Please enter an amount greater than $0." }),
+  status: z.enum(["pending", "paid"], { invalid_type_error: "Please select an invoice status" }),
   date: z.string(),
 });
 
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
-export type State = {
-  errors?: {
-    customerId?: string[];
-    amount?: string[];
-    status?: string[];
-  };
-  message?: string | null;
-};
 
 export async function createInvoice(prevState: State, formData: FormData) {
   // Validate form using Zod
@@ -89,6 +77,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
     console.error("Database Error:", error);
     return { message: "Database Error: Failed to Create Invoice." };
   }
+
   revalidatePath("/dashboard/invoices");
   redirect("/dashboard/invoices");
 }

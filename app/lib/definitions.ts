@@ -38,7 +38,6 @@ export type Revenue = {
   revenue: number;
 };
 
-
 // OTROS
 
 export type LatestInvoice = {
@@ -85,14 +84,23 @@ export type FormattedCustomersTable = {
   total_paid: string;
 };
 
-export type CustomerField = {
-  id: string;
-  name: string;
-};
-
 export type InvoiceForm = {
   id: string;
   customer_id: string;
   amount: number;
   status: "pending" | "paid";
+};
+
+export type State = {
+  errors?: {
+    customerId?: string[];
+    amount?: string[];
+    status?: string[];
+  };
+  message?: string | null;
+};
+
+export type CustomerField = {
+  id: string;
+  name: string;
 };

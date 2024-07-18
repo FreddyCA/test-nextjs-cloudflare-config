@@ -1,6 +1,6 @@
 'use client';
 
-import { CustomerField } from '@/app/lib/definitions';
+import { CustomerField, State } from '@/app/lib/definitions';
 import Link from 'next/link';
 import {
   CheckIcon,
@@ -9,19 +9,12 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '../button';
-import { createInvoice, State } from '@/app/lib/actions';
+import { createInvoice } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 
+
 export default function Form({ customers }: { customers: CustomerField[] }) {
-  // const initialState = { message: null, errors: {} };
-  const initialState: State = {
-    message: null,
-    errors: {
-      customerId: [],
-      amount: [],
-      status: []
-    }
-  }
+  const initialState: State = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createInvoice, initialState);
 
   return (
@@ -54,7 +47,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
 
           <div id="customer-error" aria-live="polite" aria-atomic="true">
             {state.errors?.customerId &&
-              state.errors.customerId.map((error: string) => (
+              state.errors.customerId.map((error) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>
                   {error}
                 </p>
@@ -84,7 +77,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
 
           <div id="amount-error" aria-live="polite" aria-atomic="true">
             {state.errors?.amount &&
-              state.errors.amount.map((error: string) => (
+              state.errors.amount.map((error) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>
                   {error}
                 </p>
@@ -105,7 +98,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   name="status"
                   type="radio"
                   value="pending"
-                  className="text-white-600 h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 focus:ring-2"
+                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 focus:ring-2"
                 />
                 <label
                   htmlFor="pending"
@@ -133,7 +126,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
           </div>
           <div id="status-error" aria-live="polite" aria-atomic="true">
             {state.errors?.status &&
-              state.errors.status.map((error: string) => (
+              state.errors.status.map((error) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>
                   {error}
                 </p>
@@ -142,9 +135,9 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
         </fieldset>
 
         <div aria-live="polite" aria-atomic="true">
-          {state.message ? (
+          {state.message && (
             <p className="mt-2 text-sm text-red-500">{state.message}</p>
-          ) : null}
+          )}
         </div>
       </div>
       <div className="mt-6 flex justify-end gap-4">
