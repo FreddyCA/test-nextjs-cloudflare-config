@@ -20,6 +20,12 @@ export type Invoice = {
   date: string;
   status: "pending" | "paid";
 };
+export type InvoiceForm = {
+  id: string;
+  customer_id: string;
+  amount: number;
+  status: string;
+};
 
 export type Revenue = {
   month: string;
@@ -71,7 +77,6 @@ export type FormattedCustomersTable = {
   total_pending: string;
   total_paid: string;
 };
-
 
 // CREATE INVOICES
 

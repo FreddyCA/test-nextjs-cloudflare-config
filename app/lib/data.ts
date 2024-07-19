@@ -148,3 +148,32 @@ export async function fetchCustomers() {
     throw new Error("Failed to fetch all customers.");
   }
 }
+
+export async function fetchInvoiceById(id: string) {
+  noStore();
+  try {
+    const data = await db
+      .select({
+        id: invoicesTable.id,
+        customer_id: invoicesTable.customer_id,
+        amount: invoicesTable.amount,
+        status: invoicesTable.status,
+      })
+      .from(invoicesTable)
+      .where(eq(invoicesTable.id, id));
+
+    if (data.length === 0) {
+      throw new Error("Invoice not found");
+    }
+    const invoice = data[0];
+
+    const dataInvoice = {
+      ...invoice,
+      amount: invoice.amount / 100,
+    };
+    return dataInvoice;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch invoice ID.");
+  }
+}
