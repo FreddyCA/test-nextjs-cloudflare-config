@@ -11,8 +11,7 @@ import { eq } from "drizzle-orm";
 
 // DELETE INVOICE
 export async function deleteInvoice(id: string) {
-  console.log(id);
-
+  throw new Error('Failed to Delete Invoice');
   try {
     await db.delete(invoicesTable).where(eq(invoicesTable.id, id));
     revalidatePath("/dashboard/invoices");
