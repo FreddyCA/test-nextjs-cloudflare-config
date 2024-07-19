@@ -1,7 +1,5 @@
-import { getDataPokeapi } from "@/app/lib/data";
-
-export default async function customersPage() {
-  const response = await getDataPokeapi();
-
-  return <div>{response.count}</div>;
+export default function CustomersPage() {
+  return (
+    <div>CustomersPage</div>
+  )
 }

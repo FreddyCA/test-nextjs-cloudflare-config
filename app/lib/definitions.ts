@@ -1,15 +1,3 @@
-// PARA LA FETCH API POKEAPI
-export type Pokemon = {
-  name: string;
-  url: string;
-};
-export type PokeapiResponse = {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: Pokemon[];
-};
-
 //   LO QUE DEVUELVE LA DB
 export type User = {
   id: string;
