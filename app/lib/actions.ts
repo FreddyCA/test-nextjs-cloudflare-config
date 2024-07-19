@@ -14,9 +14,6 @@ import { redirect } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import { eq } from "drizzle-orm";
 
-// EDIT INVOICE
-
-
 // DELETE INVOICE
 export async function deleteInvoice(id: string) {
   console.log(id);
@@ -70,7 +67,6 @@ export async function createInvoice(
   const { customerId, amount, status } = validatedFields.data;
   const amountInCents = amount * 100;
   const date = new Date().toISOString().split("T")[0];
-
   try {
     const invoicesNewUUID: string = uuidv4();
 
@@ -87,6 +83,46 @@ export async function createInvoice(
     revalidatePath("/dashboard/invoices");
   } catch (error) {
     return { message: "No se creó la factura", errors: {} };
+  }
+  redirect("/dashboard/invoices");
+}
+
+// EDIT INVOICE
+const UpdateInvoice = FormSchema.omit({ id: true, date: true });
+
+export async function updateInvoice(
+  id: string,
+  prevState: CreateInvoiceState,
+  formData: FormData
+) {
+  const validatedFields = UpdateInvoice.safeParse({
+    customerId: formData.get("customerId"),
+    amount: formData.get("amount"),
+    status: formData.get("status"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Missing Fields. Failed to Update Invoice.",
+    };
+  }
+
+  const { customerId, amount, status } = validatedFields.data;
+  const amountInCents = amount * 100;
+
+  try {
+    await db
+      .update(invoicesTable)
+      .set({
+        customer_id: customerId,
+        amount: amountInCents,
+        status: status,
+      })
+      .where(eq(invoicesTable.id, id));
+    revalidatePath("/dashboard/invoices");
+  } catch (error) {
+    return { message: "No se editó la factura", errors: {} };
   }
   redirect("/dashboard/invoices");
 }

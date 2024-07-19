@@ -14,26 +14,30 @@ export const generateYAxis = (revenue: Revenue[]) => {
   return { yAxisLabels, topLabel };
 };
 
-
 export const formatCurrency = (amount: number) => {
-  return (amount / 100).toLocaleString('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  return (amount / 100).toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
   });
 };
 
 export const formatDateToLocal = (
   dateStr: string,
-  locale: string = 'es-BO',
+  locale: string = "es-BO"
 ) => {
   const date = new Date(dateStr);
+
+  // Asegúrate de que la fecha se interpreta como UTC
+  const utcDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+
   const options: Intl.DateTimeFormatOptions = {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC", // Asegura que la fecha se formatee en UTC
   };
-  const formatter = new Intl.DateTimeFormat(locale, options);
-  return formatter.format(date);
+
+  return utcDate.toLocaleDateString(locale, options);
 };
 
 export const generatePagination = (currentPage: number, totalPages: number) => {
@@ -46,13 +50,13 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
   // If the current page is among the first 3 pages,
   // show the first 3, an ellipsis, and the last 2 pages.
   if (currentPage <= 3) {
-    return [1, 2, 3, '...', totalPages - 1, totalPages];
+    return [1, 2, 3, "...", totalPages - 1, totalPages];
   }
 
   // If the current page is among the last 3 pages,
   // show the first 2, an ellipsis, and the last 3 pages.
   if (currentPage >= totalPages - 2) {
-    return [1, 2, '...', totalPages - 2, totalPages - 1, totalPages];
+    return [1, 2, "...", totalPages - 2, totalPages - 1, totalPages];
   }
 
   // If the current page is somewhere in the middle,
@@ -60,13 +64,11 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
   // another ellipsis, and the last page.
   return [
     1,
-    '...',
+    "...",
     currentPage - 1,
     currentPage,
     currentPage + 1,
-    '...',
+    "...",
     totalPages,
   ];
 };
-
-
