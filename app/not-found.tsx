@@ -1,40 +1,31 @@
-export const runtime = "edge";
+"use client";
+import { useRouter } from "next/navigation";
+import { FaceFrownIcon } from "@heroicons/react/24/outline";
+
 export default function NotFound() {
+  const router = useRouter();
+
+  const handleGoBack = () => {
+    if (window.history.length > 1) {
+      router.back();
+    } else {
+      router.push("/"); // Redirige al home si no hay historial
+    }
+  };
+
   return (
-    <>
-      <title>404: No se encontró la página web</title>
-      <div style={styles.error}>
-        <div>
-          <style
-            dangerouslySetInnerHTML={{
-              __html: `body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}`,
-            }}
-          />
-          <h1 className="next-error-h1" style={styles.h1}>
-            404
-          </h1>
-          <div style={styles.desc}>
-            <h2 style={styles.h2}>Esta página esta fuera de servicio</h2>
-          </div>
-        </div>
-      </div>
-    </>
+    <main className="flex h-screen flex-col items-center justify-center gap-4 p-6">
+      <FaceFrownIcon className="w-16 h-16 text-gray-500" />
+      <h1 className="text-3xl font-bold text-gray-800">404 Not Found</h1>
+      <p className="text-lg text-gray-600">
+        The requested invoice could not be found.
+      </p>
+      <button
+        onClick={handleGoBack}
+        className="mt-6 inline-block rounded-md bg-blue-600 px-6 py-3 text-sm font-medium text-white transition-colors duration-300 hover:bg-blue-500"
+      >
+        Return
+      </button>
+    </main>
   );
 }
-
-const styles = {
-  error: {
-    fontFamily:
-      'system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji"',
-    height: "100vh",
-  },
-  desc: {
-    display: "inline-block",
-  },
-
-  h1: { display: "inline-block", margin: "0 20px 0 0" },
-
-  h2: {
-    fontSize: 14,
-  },
-} as const;
