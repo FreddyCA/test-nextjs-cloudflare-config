@@ -1,5 +1,5 @@
-// import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import { fetchCustomers } from "@/app/lib/data";
+import Breadcrumbs from "@/app/ui/invoices/breadcrumbs";
 import FormInvoice from "@/app/ui/invoices/create-form";
 import { Metadata } from "next";
 
@@ -13,7 +13,7 @@ export default async function InvoicePage() {
  
   return (
     <main>
-      {/* <Breadcrumbs
+      <Breadcrumbs
         breadcrumbs={[
           { label: 'Invoices', href: '/dashboard/invoices' },
           {
@@ -22,7 +22,7 @@ export default async function InvoicePage() {
             active: true,
           },
         ]}
-      /> */}
+      />
       <FormInvoice customers={responseCustomers} />
     </main>
   );
