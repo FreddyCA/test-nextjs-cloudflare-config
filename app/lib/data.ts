@@ -5,13 +5,13 @@ import { db } from "./db";
 import { customersTable, invoicesTable, revenueTable } from "./db/schema";
 import { asc, desc, eq, or, sql } from "drizzle-orm";
 
-export async function getDataPokeapi(): Promise<PokeapiResponse> {
-  const res = await fetch("https://pokeapi.co/api/v2/pokemon");
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
-  }
-  return res.json();
-}
+// export async function getDataPokeapi(): Promise<PokeapiResponse> {
+//   const res = await fetch("https://pokeapi.co/api/v2/pokemon");
+//   if (!res.ok) {
+//     throw new Error("Failed to fetch data");
+//   }
+//   return res.json();
+// }
 
 export async function fetchRevenue() {
   // evitamos que se almacene en cache del cliente

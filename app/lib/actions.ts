@@ -15,17 +15,19 @@ import { v4 as uuidv4 } from "uuid";
 import { CreateInvoiceState } from "./definitions";
 
 export async function deleteInvoice(id: string) {
-  try {
-    await db.delete(invoicesTable).where(eq(invoicesTable.id, id)).execute();
+  console.log(id);
 
-    // Asumiendo que `revalidatePath` es una función para revalidar la caché o similar
-    revalidatePath("/dashboard/invoices");
+  // try {
+  //   await db.delete(invoicesTable).where(eq(invoicesTable.id, id)).execute();
 
-    return { message: "Deleted Invoice." };
-  } catch (error) {
-    console.error("Database Error:", error);
-    return { message: "Database Error: Failed to Delete Invoice." };
-  }
+  //   // Asumiendo que `revalidatePath` es una función para revalidar la caché o similar
+  //   revalidatePath("/dashboard/invoices");
+
+  //   return { message: "Deleted Invoice." };
+  // } catch (error) {
+  //   console.error("Database Error:", error);
+  //   return { message: "Database Error: Failed to Delete Invoice." };
+  // }
 }
 
 // CREATE INVOICE
