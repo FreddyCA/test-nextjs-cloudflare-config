@@ -1,4 +1,5 @@
 "use server";
+
 import { unstable_noStore as noStore } from "next/cache";
 import { db } from "./db";
 import { customersTable, invoicesTable, revenueTable } from "./db/schema";
@@ -135,6 +136,7 @@ export async function fetchInvoicesPages(query: string) {
 }
 
 export async function fetchCustomers() {
+  noStore();
   try {
     const data = await db
       .select({ id: customersTable.id, name: customersTable.name })

@@ -5,14 +5,13 @@
 // utils.ts formatCurrency formatDateToLocal generateYAxis generatePagination
 "use server";
 
-import { eq } from "drizzle-orm";
+import { z } from "zod";
+import { CreateInvoiceState } from "./definitions";
 import { db } from "./db";
 import { invoicesTable } from "./db/schema";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
-import { CreateInvoiceState } from "./definitions";
 
 export async function deleteInvoice(id: string) {
   console.log(id);

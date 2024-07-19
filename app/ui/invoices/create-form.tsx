@@ -7,8 +7,8 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import { useFormState } from "react-dom";
-import { CustomerField, initialState } from "@/app/lib/definitions";
 import { createInvoice } from "@/app/lib/actions";
+import { CustomerField, initialState } from "@/app/lib/definitions";
 
 // agregar validacion del lado del cliente
 export default function FormInvoice({
