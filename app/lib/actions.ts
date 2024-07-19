@@ -12,21 +12,19 @@ import { invoicesTable } from "./db/schema";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
+import { eq } from "drizzle-orm";
 
+// DELETE INVOICE
 export async function deleteInvoice(id: string) {
   console.log(id);
 
-  // try {
-  //   await db.delete(invoicesTable).where(eq(invoicesTable.id, id)).execute();
-
-  //   // Asumiendo que `revalidatePath` es una función para revalidar la caché o similar
-  //   revalidatePath("/dashboard/invoices");
-
-  //   return { message: "Deleted Invoice." };
-  // } catch (error) {
-  //   console.error("Database Error:", error);
-  //   return { message: "Database Error: Failed to Delete Invoice." };
-  // }
+  try {
+    await db.delete(invoicesTable).where(eq(invoicesTable.id, id));
+    revalidatePath("/dashboard/invoices");
+    return { message: "Delete Inovice" };
+  } catch (error) {
+    return { message: "Database Error: Failed to Delete Invoice." };
+  }
 }
 
 // CREATE INVOICE
