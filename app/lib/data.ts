@@ -6,7 +6,6 @@ import { customersTable, invoicesTable, revenueTable } from "./db/schema";
 import { asc, desc, eq, or, sql } from "drizzle-orm";
 
 export async function fetchRevenue() {
-  // evitamos que se almacene en cache del cliente
   noStore();
 
   try {
@@ -33,8 +32,8 @@ export async function fetchLatestInvoices() {
       .innerJoin(
         customersTable,
         eq(invoicesTable.customer_id, customersTable.id)
-      ) // Uso de eq para la condición
-      .orderBy(desc(invoicesTable.date)) // Uso de desc para ordenación descendente
+      )
+      .orderBy(desc(invoicesTable.date))
       .limit(5);
 
     return data;

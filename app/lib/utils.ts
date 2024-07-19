@@ -25,19 +25,19 @@ export const formatDateToLocal = (
   dateStr: string,
   locale: string = "es-BO"
 ) => {
-  const date = new Date(dateStr);
-
-  // Asegúrate de que la fecha se interpreta como UTC
-  const utcDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-
+  const date = new Date(dateStr); // Asegúrate de que dateStr sea una cadena ISO válida
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
     month: "short",
     year: "numeric",
-    timeZone: "UTC", // Asegura que la fecha se formatee en UTC
+    // para mayor especificidad:
+    // hour: '2-digit',
+    // minute: '2-digit',
+    // second: '2-digit',
+    // hour12: false, // Para formato de 24 horas, usa `true` para formato de 12 horas
   };
-
-  return utcDate.toLocaleDateString(locale, options);
+  const formatter = new Intl.DateTimeFormat(locale, options);
+  return formatter.format(date);
 };
 
 export const generatePagination = (currentPage: number, totalPages: number) => {

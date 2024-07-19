@@ -10,7 +10,6 @@ import { useFormState } from "react-dom";
 import { createInvoice } from "@/app/lib/actions";
 import { CustomerField, initialState } from "@/app/lib/definitions";
 
-// agregar validacion del lado del cliente
 export default function FormInvoice({
   customers,
 }: {

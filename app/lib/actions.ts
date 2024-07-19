@@ -1,8 +1,3 @@
-// actions.ts -> use server authenticate, CRUD
-// data.ts -> fetchRevenue fetchLatestInvoices fetchCardData fetchFilteredInvoices fetchInvoicesPages fetchInvoiceById fetchCustomers fetchFilteredCustomers getUser
-// definitions.ts -> export type InvoiceForm = {}
-// placeholder-data.js -> DATOS INICIALES const etc = [{}], module.export = {etc}
-// utils.ts formatCurrency formatDateToLocal generateYAxis generatePagination
 "use server";
 
 import { z } from "zod";
@@ -66,7 +61,9 @@ export async function createInvoice(
   // Preparando data para inserción
   const { customerId, amount, status } = validatedFields.data;
   const amountInCents = amount * 100;
-  const date = new Date().toISOString().split("T")[0];
+  // const date = new Date().toISOString().split("T")[0]; -> sin horas, min ni seg
+  const date = new Date().toISOString();
+
   try {
     const invoicesNewUUID: string = uuidv4();
 
