@@ -84,14 +84,15 @@ export type FormattedCustomersTable = {
   total_paid: string;
 };
 
-export type InvoiceForm = {
+
+// CREATE INVOICES
+
+export type CustomerField = {
   id: string;
-  customer_id: string;
-  amount: number;
-  status: "pending" | "paid";
+  name: string;
 };
 
-export type State = {
+export type CreateInvoiceState = {
   errors?: {
     customerId?: string[];
     amount?: string[];
@@ -100,7 +101,11 @@ export type State = {
   message?: string | null;
 };
 
-export type CustomerField = {
-  id: string;
-  name: string;
+export const initialState: CreateInvoiceState = {
+  errors: {
+    customerId: [],
+    amount: [],
+    status: [],
+  },
+  message: "",
 };

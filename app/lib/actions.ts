@@ -12,7 +12,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
-import { State } from "./definitions";
+import { CreateInvoiceState } from "./definitions";
 
 export async function deleteInvoice(id: string) {
   try {
@@ -28,34 +28,43 @@ export async function deleteInvoice(id: string) {
   }
 }
 
-
+// CREATE INVOICE
 const FormSchema = z.object({
   id: z.string(),
-  customerId: z.string().nonempty("Please select a customer."),
-  amount: z.coerce.number().gt(0, { message: "Please enter an amount greater than $0." }),
-  status: z.enum(["pending", "paid"], { invalid_type_error: "Please select an invoice status" }),
+  customerId: z.string({
+    invalid_type_error: "Please select a customer.",
+  }),
+  amount: z.coerce
+    .number()
+    .gt(0, { message: "Please enter an amount greater than $0." }),
+  status: z.enum(["pending", "paid"], {
+    invalid_type_error: "Please select an invoice status",
+  }),
   date: z.string(),
 });
 
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
 
-export async function createInvoice(prevState: State, formData: FormData) {
-  // Validate form using Zod
+export async function createInvoice(
+  prevState: CreateInvoiceState,
+  formData: FormData
+): Promise<CreateInvoiceState> {
+  // Validado por zod
   const validatedFields = CreateInvoice.safeParse({
     customerId: formData.get("customerId"),
-    amount: formData.get("amount"),
+    amount: parseFloat(formData.get("amount") as string),
     status: formData.get("status"),
   });
 
-  // If form validation fails, return errors early. Otherwise, continue.
+  // Validando la respuesta de safeParse
   if (!validatedFields.success) {
     return {
+      message: null,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create Invoice.",
     };
   }
 
-  // Prepare data for insertion into the database
+  // Preparando data para inserción
   const { customerId, amount, status } = validatedFields.data;
   const amountInCents = amount * 100;
   const date = new Date().toISOString().split("T")[0];
@@ -73,11 +82,9 @@ export async function createInvoice(prevState: State, formData: FormData) {
         date,
       })
       .execute();
+    revalidatePath("/dashboard/invoices");
   } catch (error) {
-    console.error("Database Error:", error);
-    return { message: "Database Error: Failed to Create Invoice." };
+    return { message: "No se creó la factura", errors: {} };
   }
-
-  revalidatePath("/dashboard/invoices");
   redirect("/dashboard/invoices");
 }
