@@ -8,6 +8,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import { eq } from "drizzle-orm";
+import { signIn } from "@/auth";
+import { AuthError } from "next-auth";
 
 // DELETE INVOICE
 export async function deleteInvoice(id: string) {
@@ -16,8 +18,11 @@ export async function deleteInvoice(id: string) {
     revalidatePath("/dashboard/invoices");
     return { success: true, message: "Invoice deleted successfully." };
   } catch (error) {
-    console.error('Failed to delete invoice:', error);
-    return { success: false, message: "Database Error: Failed to delete invoice." };
+    console.error("Failed to delete invoice:", error);
+    return {
+      success: false,
+      message: "Database Error: Failed to delete invoice.",
+    };
   }
 }
 
@@ -121,4 +126,24 @@ export async function updateInvoice(
     return { message: "No se editó la factura", errors: {} };
   }
   redirect("/dashboard/invoices");
+}
+
+// USER LOGIN
+export async function authenticate(
+  prevState: string | undefined,
+  formData: FormData
+) {
+  try {
+    await signIn("credentials", formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Invalid credentials.";
+        default:
+          return "Something went wrong.";
+      }
+    }
+    throw error;
+  }
 }
