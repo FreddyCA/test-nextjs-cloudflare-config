@@ -6,8 +6,13 @@ import { Suspense } from "react";
 import InvoicesTable from "@/app/ui/invoices/table";
 import { fetchInvoicesPages } from "@/app/lib/data";
 import Pagination from "@/app/ui/invoices/pagination";
+import { Metadata } from "next";
 
 export const runtime = "edge";
+
+export const metadata: Metadata = {
+  title: 'Invoices',
+};
 
 export default async function InvoicesPage({
   searchParams,
