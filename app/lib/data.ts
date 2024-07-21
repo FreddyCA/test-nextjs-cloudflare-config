@@ -3,7 +3,8 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { db } from "./db";
 import { customersTable, invoicesTable, revenueTable } from "./db/schema";
-import { asc, desc, eq, or, sql } from "drizzle-orm";
+import { asc, count, desc, eq, or, sql, sum } from "drizzle-orm";
+import { formatCurrency } from "./utils";
 
 export async function fetchRevenue() {
   noStore();
@@ -173,5 +174,53 @@ export async function fetchInvoiceById(id: string) {
     return dataInvoice;
   } catch (error) {
     throw new Error("Failed to fetch invoice ID.");
+  }
+}
+
+export async function fetchFilteredCustomers(query: string) {
+  noStore();
+
+  try {
+    const data = await db
+      .select({
+        id: customersTable.id,
+        name: customersTable.name,
+        email: customersTable.email,
+        image_url: customersTable.image_url,
+        total_invoices: count(invoicesTable.id),
+        total_pending: sum(
+          sql`CASE WHEN ${invoicesTable.status} = 'pending' THEN ${invoicesTable.amount} ELSE 0 END`
+        ),
+        total_paid: sum(
+          sql`CASE WHEN ${invoicesTable.status} = 'paid' THEN ${invoicesTable.amount} ELSE 0 END`
+        ),
+      })
+      .from(customersTable)
+      .leftJoin(invoicesTable, eq(customersTable.id, invoicesTable.customer_id))
+      .where(
+        or(
+          sql`LOWER(${customersTable.name}) LIKE LOWER(${`%${query}%`})`,
+          sql`LOWER(${customersTable.email}) LIKE LOWER(${`%${query}%`})`
+        )
+      )
+      .groupBy(
+        customersTable.id,
+        customersTable.name,
+        customersTable.email,
+        customersTable.image_url
+      )
+      .orderBy(asc(customersTable.name))
+      .execute();
+
+    const customers = data.map((customer) => ({
+      ...customer,
+      total_pending: formatCurrency(Number(customer.total_pending)),
+      total_paid: formatCurrency(Number(customer.total_paid)),
+    }));
+
+    return customers;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch customer table.");
   }
 }
